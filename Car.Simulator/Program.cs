@@ -4,6 +4,7 @@ using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using Car.Shared;
+using System.Globalization;
 
 namespace Car.Simulator
 {
@@ -72,9 +73,10 @@ namespace Car.Simulator
                 {
                     ["api_key"] = writeKey,
                     ["field1"] = carData.Rpm.ToString(),            // RPM
-                    ["field2"] = carData.SpeedKph.ToString("F1"),   // Speed
-                    ["field3"] = carData.FuelPercent.ToString("F1"),// Fuel
-                    ["field4"] = carData.EngineTempC.ToString("F1") // Temp
+                    ["field2"] = carData.SpeedKph.ToString("F1", CultureInfo.InvariantCulture),
+                    ["field3"] = carData.FuelPercent.ToString("F1", CultureInfo.InvariantCulture),
+                    ["field4"] = carData.EngineTempC.ToString("F1", CultureInfo.InvariantCulture),
+
                 };
 
                 try
@@ -109,7 +111,7 @@ namespace Car.Simulator
                 // Wait between samples (ThingSpeak free tier often needs ~15s; increase if you see 0 responses)
                 try
                 {
-                    await Task.Delay(TimeSpan.FromSeconds(5), cts.Token);
+                    await Task.Delay(TimeSpan.FromSeconds(15), cts.Token);
                     // If updates are dropped (API returns 0), change to: TimeSpan.FromSeconds(15)
                 }
                 catch (OperationCanceledException) { break; }
